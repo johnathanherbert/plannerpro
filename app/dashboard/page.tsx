@@ -15,6 +15,7 @@ import { TransactionModal } from '@/components/TransactionModal'
 import { AccountModal } from '@/components/AccountModal'
 import { CreditCardModal } from '@/components/CreditCardModal'
 import { AccountsSummary } from '@/components/AccountsSummary'
+import { CategoryChart } from '@/components/CategoryChart'
 import { MemberAvatars } from '@/components/MemberAvatars'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -260,6 +261,9 @@ export default function DashboardPage() {
             onCreateAccount={() => setAccountModalOpen(true)}
             onCreateCard={() => setCreditCardModalOpen(true)}
           />
+
+          {/* Category Chart */}
+          <CategoryChart transactions={transactions} loading={transactionsLoading} />
 
           {/* Transactions List */}
           <TransactionList
