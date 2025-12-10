@@ -1,7 +1,7 @@
 'use client'
 
 // Sign Up page - create account with option to create or join household
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { signUpWithEmail, signInWithGoogle } from '@/services/auth'
@@ -13,7 +13,7 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Invitation } from '@/types'
 
-export default function SignUpPage() {
+function SignUpContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const inviteToken = searchParams.get('token')
@@ -264,5 +264,13 @@ export default function SignUpPage() {
         </CardContent>
       </Card>
     </div>
+  )
+}
+
+export default function SignUpPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Carregando...</div>}>
+      <SignUpContent />
+    </Suspense>
   )
 }
