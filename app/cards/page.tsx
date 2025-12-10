@@ -73,6 +73,7 @@ export default function CreditCardsPage() {
   }
 
   const handleDeleteAllBills = async () => {
+    if (!user) return
     if (!confirm('⚠️ DEBUG: Deletar TODAS as faturas? Esta ação não pode ser desfeita!')) return
     
     try {
