@@ -102,7 +102,7 @@ export default function CreditCardsPage() {
       
       alert(`✅ ${deleted} de ${billsSnapshot.docs.length} faturas deletadas!`)
       window.location.reload() // Reload to update UI
-    } catch (error) {
+    } catch (error: any) {
       console.error('[DEBUG] Erro ao deletar faturas:', error)
       alert(`Erro: ${error.message}`)
     }
