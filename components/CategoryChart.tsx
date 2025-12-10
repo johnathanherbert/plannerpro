@@ -103,58 +103,26 @@ export function CategoryChart({ transactions, loading }: CategoryChartProps) {
   }
 
   const CustomLegend = ({ payload }: any) => {
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-6 px-2">
-        {payload.map((entry: any, index: number) => {
-          const percentage = ((entry.payload.value / totalExpenses) * 100).toFixed(1)
-          return (
-            <div 
-              key={`legend-${index}`} 
-              className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-slate-50 to-transparent hover:from-slate-100 transition-all duration-200 cursor-pointer group"
-            >
-              <div 
-                className="w-4 h-4 rounded-full flex-shrink-0 shadow-md group-hover:scale-110 transition-transform" 
-                style={{ 
-                  background: `linear-gradient(135deg, ${entry.color}, ${entry.color}dd)`,
-                  boxShadow: `0 0 10px ${entry.color}40`
-                }}
-              />
-              <div className="flex-1 min-w-0">
-                <p className="font-semibold text-sm truncate group-hover:text-primary transition-colors">{entry.value}</p>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <p className="text-xs font-bold text-primary">
-                    {formatCurrency(entry.payload.value)}
-                  </p>
-                  <span className="text-xs text-muted-foreground">•</span>
-                  <p className="text-xs text-muted-foreground font-medium">
-                    {percentage}%
-                  </p>
-                </div>
-              </div>
-            </div>
-          )
-        })}
-      </div>
-    )
+    return null // Legend now rendered outside chart for better mobile support
   }
 
   return (
     <Card className="border-0 shadow-xl overflow-hidden bg-gradient-to-br from-white to-slate-50 dark:from-slate-900 dark:to-slate-800">
       <div className="h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500" />
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <CardTitle className="flex items-center gap-3">
             <div className="relative">
               <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 blur-md opacity-50" />
               <div className="relative h-3 w-3 rounded-full bg-gradient-to-r from-blue-500 to-purple-500" />
             </div>
-            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-bold">
+            <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-bold text-lg md:text-xl">
               Despesas por Categoria
             </span>
           </CardTitle>
-          <div className="text-right">
+          <div className="text-left sm:text-right">
             <p className="text-xs text-muted-foreground font-medium">Total de Despesas</p>
-            <p className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <p className="text-lg md:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               {formatCurrency(totalExpenses)}
             </p>
           </div>
@@ -177,8 +145,8 @@ export function CategoryChart({ transactions, loading }: CategoryChartProps) {
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                innerRadius={70}
-                outerRadius={110}
+                innerRadius={60}
+                outerRadius={95}
                 paddingAngle={2}
                 fill="#8884d8"
                 dataKey="value"
@@ -196,20 +164,56 @@ export function CategoryChart({ transactions, loading }: CategoryChartProps) {
                 ))}
               </Pie>
               <Tooltip content={<CustomTooltip />} />
-              <Legend content={<CustomLegend />} />
+              <Legend 
+                content={<CustomLegend />}
+                wrapperStyle={{ display: 'none' }}
+              />
             </PieChart>
           </ResponsiveContainer>
           
           {/* Center text */}
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none" style={{ marginTop: '-40px' }}>
-            <p className="text-sm text-muted-foreground font-medium mb-1">Total Gasto</p>
-            <p className="text-2xl font-bold bg-gradient-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <p className="text-xs md:text-sm text-muted-foreground font-medium mb-1">Total Gasto</p>
+            <p className="text-xl md:text-2xl font-bold bg-gradient-to-br from-blue-600 to-purple-600 bg-clip-text text-transparent">
               {formatCurrency(totalExpenses)}
             </p>
             <p className="text-xs text-muted-foreground mt-1">
               {categoryData.length} {categoryData.length === 1 ? 'categoria' : 'categorias'}
             </p>
           </div>
+        </div>
+
+        {/* Mobile-friendly legend outside chart */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-3 mt-4 md:mt-6">
+          {categoryData.map((entry, index) => {
+            const percentage = ((entry.value / totalExpenses) * 100).toFixed(1)
+            return (
+              <div 
+                key={`legend-mobile-${index}`} 
+                className="flex items-center gap-2 md:gap-3 p-2 md:p-3 rounded-lg md:rounded-xl bg-gradient-to-r from-slate-50 to-transparent hover:from-slate-100 transition-all duration-200 cursor-pointer group"
+              >
+                <div 
+                  className="w-3 h-3 md:w-4 md:h-4 rounded-full flex-shrink-0 shadow-md group-hover:scale-110 transition-transform" 
+                  style={{ 
+                    background: `linear-gradient(135deg, ${COLORS[index % COLORS.length]}, ${COLORS[index % COLORS.length]}dd)`,
+                    boxShadow: `0 0 10px ${COLORS[index % COLORS.length]}40`
+                  }}
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-xs md:text-sm truncate group-hover:text-primary transition-colors">{entry.name}</p>
+                  <div className="flex items-center gap-1.5 md:gap-2 mt-0.5">
+                    <p className="text-xs font-bold text-primary">
+                      {formatCurrency(entry.value)}
+                    </p>
+                    <span className="text-xs text-muted-foreground">•</span>
+                    <p className="text-xs text-muted-foreground font-medium">
+                      {percentage}%
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
         </div>
       </CardContent>
     </Card>
